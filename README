@@ -1,0 +1,53 @@
+Paduretu David-Pavel 322CC - Anul 3 , ACS
+
+    Am implementat tema in C , folosind laboratorul 9 , am modificat
+ clientul si am adaugat functa de delete_request in request.c / request.h .
+Numele , parola (user) , respectiv titlu , autor , gen , editor (carte) , le-am
+considerat avand lungime fixa . 
+
+    Comenzile necesare:
+
+register: citesc numele si parola , parsez aceste date folo-
+sind JSON-ul, creez cererea de tip POST_REQUEST si trimit mesajul 
+la server. Verific codul intors de raspuns si daca este "201" , 
+inseamna ca a avut succes operatia si afisez un mesaj corespunzator . Daca nu ,
+afisez eroare . 
+
+login: analog citesc si parsez datele , doar ca acum folosesc ruta specifica
+loginului in crearea REQUEST-ului . Folosesc un flag pentru a verifica daca nu
+cumva sunt logat in acest moment . Acest lucru ma ajuta sa nu fie problema de 2
+logari succesive fara vreun logout intre ele . Daca codul primit este "200" , 
+extrag cookie-ul din raspunsul primit si setez contul ca fiind logat . 
+
+enter_library: verific print token daca sunt logat si daca ma aflu deja in biblioteca . 
+Daca ambele sunt de aceeasi valoare , ies din comanda , altfel formez cererea
+de tip GET_REQUEST , pe care o trimit spre server , iar apoi raspunsul primit 
+il verific daca este afirmativ si in acest caz extrag token-ul de acces si 
+setez flagul de intrare pe 1.
+
+get_books: formez cererea , trimit mesajul la server si 
+verific raspunsul .verific comanda in cazul de nelogat sau
+neprezent in librarie
+
+add_book: ca register/login , citesc datele caracteristice pentru 
+carte si le parsez cu JSON . Trimit mesajul spre server si , la fel , 
+verific daca a avut succes comanda prin codul returnat in response . 
+
+get_book: citesc id-ul si verific pentru acesta daca este valid(daca  e numar) . Daca nu ,
+il recitesc pana primesc un numar . Creez noua ruta pentru cererea de tip GET_REQUEST.Trimit mesajul si raspunsul
+il verific pentru a vedea succesul comenzii.
+
+delete_book: ca la login dar folosim o cerere de tip DELETE. Am schimbat GET cu DELETE   
+in compute_get_request din requests.c .Reiau pasii cu mesajul si 
+raspunsul , ca mai sus .
+
+logout: trimit cerere de tip GET_REQUEST . Trimit mesajul si daca raspunsul
+primit este afirmativ , setez sirurile pe NULL si dau reset la flaguri . 
+
+exit: opresc aplicatia .
+
+    Am folosit biblioteca recomandata parson pentru a construi mesajele . Cand am trimis ce-
+rerile am folosit functii precum json_value_init_object() , 
+json_value_get_object(value) , json_object_set_string(object, "name", name) ,
+json_serialize_to_string_pretty(value) -> functie pe care am folosit-o exclusiv
+pentru a transforma un obiect de tip JSON in sir de caractere .
